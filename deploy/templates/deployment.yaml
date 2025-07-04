@@ -1,0 +1,30 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ .Release.Name }}  
+spec:
+  replicas: {{ .Values.replicaCount }} #number of desired pod replicas
+  selector: 
+    matchLabels:
+      app: {{ .Release.Name }}
+  template:
+    metadata:
+      labels:
+        app: {{ .Release.Name }}  #labels for the pods created , match with selector 
+    spec:
+      containers:
+      - name: demo-container
+        image: {{ .Values.image.repository }}:{{ .Values.image.tag }}
+        ports: #port the container exposes
+        - containerPort: 8080
+        resources:
+          requests:
+            cpu: {{ .Values.resources.requests.cpu }} #50 milli cores (0.05 CPU)
+            memory: {{ .Values.resources.requests.memory }} 
+          limits:
+             cpu: {{ .Values.resources.limits.cpu }}
+             memory: {{ .Values.resources.limits.memory }}
+        readinessProbe:
+          tcpSocket:
+            port: 8080
+          initialDelaySeconds: 30

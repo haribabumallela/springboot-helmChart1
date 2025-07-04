@@ -1,0 +1,6 @@
+image:
+  name: helm-chart
+  tag: latest
+app:
+  s2iImage: 
+  sourceType: Binary
